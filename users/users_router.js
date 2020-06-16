@@ -4,12 +4,13 @@ const jwt = require("jsonwebtoken");
 const constants = require("../config/constants");
 const router = express.Router();
 const Users = require("./users_model.js");
-const e = require("express");
 
-router.get("/", (req, res) => {
+const restricted = require("./restricted-middleware");
+
+router.get("/", restricted, (req, res) => {
     Users.find()
     .then(users => {
-        res.status(200).json({CurrentUsers: users})
+        res.status(200).json({users, DecodedTolkien: req.decodedToken})
     })
 })
 
